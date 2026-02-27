@@ -41,6 +41,61 @@ np.random.seed(RANDOM_STATE)
 
 
 # ---------------------------------------------------------------------------
+# 1A. SMOTE VISUALIZATION FUNCTIONS  
+# ---------------------------------------------------------------------------
+
+def plot_smote_before_after(y_before, y_after):
+    os.makedirs("outputs", exist_ok=True)
+
+    before_counts = y_before.value_counts().sort_index()
+    after_counts = pd.Series(y_after).value_counts().sort_index()
+
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+
+    axes[0].bar(before_counts.index, before_counts.values)
+    axes[0].set_title("Before SMOTE")
+    axes[0].set_xticks([0, 1])
+    axes[0].set_xticklabels(["Non-Dropout", "Dropout"])
+    axes[0].set_ylabel("Number of Students")
+
+    axes[1].bar(after_counts.index, after_counts.values)
+    axes[1].set_title("After SMOTE")
+    axes[1].set_xticks([0, 1])
+    axes[1].set_xticklabels(["Non-Dropout", "Dropout"])
+
+    plt.tight_layout()
+    plt.savefig("outputs/smote_before_after.png")
+    plt.close()
+
+    print("Saved smote_before_after.png")
+
+
+def plot_smote_pca(X_before, y_before, X_after, y_after):
+    os.makedirs("outputs", exist_ok=True)
+
+    pca = PCA(n_components=2, random_state=RANDOM_STATE)
+
+    X_before_pca = pca.fit_transform(X_before)
+    X_after_pca = pca.fit_transform(X_after)
+
+    plt.figure(figsize=(12, 5))
+
+    plt.subplot(1, 2, 1)
+    plt.scatter(X_before_pca[:, 0], X_before_pca[:, 1],
+                c=y_before, alpha=0.6)
+    plt.title("Before SMOTE (PCA)")
+
+    plt.subplot(1, 2, 2)
+    plt.scatter(X_after_pca[:, 0], X_after_pca[:, 1],
+                c=y_after, alpha=0.6)
+    plt.title("After SMOTE (PCA)")
+
+    plt.tight_layout()
+    plt.savefig("outputs/smote_pca.png")
+    plt.close()
+
+    print("Saved smote_pca.png")
+# ---------------------------------------------------------------------------
 # 1. DATA LOADING & PREPROCESSING
 # ---------------------------------------------------------------------------
 
