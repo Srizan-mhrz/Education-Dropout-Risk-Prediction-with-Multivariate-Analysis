@@ -431,6 +431,18 @@ def load_and_preprocess(filepath="dataset.csv"):
     df = pd.read_csv(filepath, sep=None, engine="python")
 
     print(f"Dataset shape: {df.shape[0]} rows x {df.shape[1]} columns")
+    # -------------------------------
+# Initial Dataset Inspection
+# -------------------------------
+
+    print("\n--- Initial Data (Head) ---")
+    print(df.head())
+
+    print("\n--- Initial Data Info for Selected Features ---")
+    print(df.info())
+
+    print("\n--- Initial Data (Missing Values for Selected Features) ---")
+    print(df.isnull().sum())
 
     if "Target" not in df.columns:
         raise ValueError("ERROR: 'Target' column not found.")
@@ -467,6 +479,10 @@ def load_and_preprocess(filepath="dataset.csv"):
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled  = scaler.transform(X_test)
+    
+    print("\n--- Dataset After Encoding & Scaling ---")
+    print("Training set shape:", X_train_scaled.shape)
+    print("Test set shape:", X_test_scaled.shape)
 
     # SMOTE (training data only)
     smote = SMOTE(random_state=RANDOM_STATE)
